@@ -1,0 +1,150 @@
+[
+  {
+    "id": "01",
+    "title": "secret",
+    "technique": "watercolour, paper",
+    "dimensions": "28x37 cm",
+    "year": 2026,
+    "price": 400,
+    "currency": "USD",
+    "status": "available",
+    "photos": ["photos/secret.jpg"]
+  },
+  {
+    "id": "02",
+    "title": "wild",
+    "technique": "watercolour, paper",
+    "dimensions": "32x44 cm",
+    "year": 2025,
+    "price": 500,
+    "currency": "USD",
+    "status": "available",
+    "photos": ["photos/wild.jpg"]
+  },
+  {
+    "id": "03",
+    "title": "body",
+    "technique": "watercolour, paper, ink pencil",
+    "dimensions": "30x42 cm",
+    "year": 2025,
+    "price": 450,
+    "currency": "USD",
+    "status": "available",
+    "photos": ["photos/body.jpg"]
+  },
+  {
+    "id": "04",
+    "title": "breath",
+    "technique": "watercolour, paper",
+    "dimensions": "50x40 cm",
+    "year": 2026,
+    "price": 550,
+    "currency": "USD",
+    "status": "available",
+    "photos": ["photos/breath.jpg"]
+  },
+  {
+    "id": "05",
+    "title": "something is taking root",
+    "technique": "watercolour",
+    "dimensions": "40x70 cm",
+    "year": 2025,
+    "price": 700,
+    "currency": "USD",
+    "status": "available",
+    "photos": [
+      "photos/something-is-taking-root-1.jpg",
+      "photos/something-is-taking-root-2.jpg",
+      "photos/something-is-taking-root-3.jpg",
+      "photos/something-is-taking-root-4.jpg"
+    ]
+  },
+  {
+    "id": "06",
+    "title": "a face i almost remember",
+    "technique": "watercolour, paper",
+    "dimensions": "14x21 cm",
+    "year": 2025,
+    "price": null,
+    "currency": "USD",
+    "status": "sold",
+    "photos": ["photos/a-face-i-almost-remember.jpg"]
+  },
+  {
+    "id": "07",
+    "title": "blooming disorder",
+    "technique": "watercolour, paper",
+    "dimensions": "25x48 cm",
+    "year": 2025,
+    "price": 500,
+    "currency": "USD",
+    "status": "available",
+    "photos": ["photos/blooming-disorder.jpg"]
+  },
+  {
+    "id": "08",
+    "title": "soft touches",
+    "technique": "watercolour, paper",
+    "dimensions": "46x35 cm",
+    "year": 2026,
+    "price": 500,
+    "currency": "USD",
+    "status": "available",
+    "photos": ["photos/soft-touches.jpg"]
+  },
+  {
+    "id": "09",
+    "title": "mothsomnia",
+    "technique": "watercolour, paper",
+    "dimensions": "49x26 cm",
+    "year": 2026,
+    "price": 450,
+    "currency": "USD",
+    "status": "available",
+    "photos": ["photos/mothsomnia-1.jpg"]
+  },
+  {
+    "id": "10",
+    "title": "run through the bitter herbs",
+    "technique": "watercolour, paper",
+    "dimensions": "65x48 cm",
+    "year": null,
+    "price": 700,
+    "currency": "USD",
+    "status": "available",
+    "photos": ["photos/run-through-the-bitter-herbs.jpg"]
+  },
+  {
+    "id": "11",
+    "title": "spring blush",
+    "technique": "watercolour, paper",
+    "dimensions": null,
+    "year": 2026,
+    "price": 250,
+    "currency": "USD",
+    "status": "available",
+    "photos": ["photos/spring-blush.jpg"]
+  },
+  {
+    "id": "12",
+    "title": "water lily",
+    "technique": "watercolour, paper",
+    "dimensions": "24.5x48 cm",
+    "year": 2025,
+    "price": 300,
+    "currency": "USD",
+    "status": "available",
+    "photos": ["photos/water-lily.png"]
+  },
+  {
+    "id": "13",
+    "title": "heavenly dog",
+    "technique": "oil, hardboard",
+    "dimensions": "20x20 cm",
+    "year": 2024,
+    "price": 400,
+    "currency": "USD",
+    "status": "available",
+    "photos": []
+  }
+]
