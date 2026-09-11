@@ -93,6 +93,28 @@
     }
   }
 
+  .buy-link{
+    position:fixed;
+    top:1.5vh;
+    left:5vw;
+    z-index:20;
+    font-size:11px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--ink);
+    font-weight:700;
+    text-decoration:none;
+    transition:opacity .2s ease;
+  }
+  .buy-link:hover{
+    opacity:0.55;
+  }
+  @media (max-width:639px){
+    .buy-link{
+      top:7vh;
+    }
+  }
+
   /* ---- cover ---- */
   .cover{
     text-align:left;
@@ -103,46 +125,39 @@
   .cover .bottom{
     width:100%;
   }
-  .cover .buy-link{
+  .cover .deco{
     position:absolute;
-    top:1.5vh;
-    left:5vw;
-    font-size:11px;
-    letter-spacing:0.04em;
-    color:var(--ink);
-    font-weight:700;
-    text-decoration:none;
-    transition:opacity .2s ease;
-  }
-  .cover .buy-link:hover{
-    opacity:0.55;
-  }
-  @media (max-width:639px){
-    .cover .buy-link{
-      top:7vh;
-    }
+    top:38%;
+    left:56%;
+    width:min(115vw, 1300px);
+    height:auto;
+    max-height:70vh;
+    transform:translate(-56%, -46%) rotate(-6deg);
+    z-index:-1;
+    pointer-events:none;
+    user-select:none;
   }
   .cover .title-group{
     margin-top:9vh;
   }
+  .cover .catalog-label{
+    font-size:clamp(11px, 2.4vw, 15px);
+    color:var(--muted);
+    letter-spacing:0.04em;
+    margin-bottom:6px;
+  }
   .cover .title{
-    font-size:clamp(38px, 14vw, 120px);
+    font-size:clamp(28px, 9vw, 68px);
     font-weight:700;
-    line-height:0.98;
-    letter-spacing:-0.02em;
+    line-height:1.05;
+    letter-spacing:-0.01em;
+    max-width:13ch;
     margin:0;
   }
   @media (min-width:640px){
     .cover .title-group{
       margin-top:4vh;
     }
-  }
-  .cover .exhibition-name{
-    font-size:clamp(11px, 2.4vw, 15px);
-    color:var(--muted);
-    letter-spacing:0.04em;
-    margin-top:14px;
-    max-width:28ch;
   }
   .cover .meta{
     display:flex;
@@ -157,23 +172,10 @@
     display:block;
     font-weight:700;
   }
-  .cover .scroll-cue{
+  .cover .scroll-arrow{
     position:absolute;
     bottom:3vh;
     right:5vw;
-    display:flex;
-    flex-direction:column;
-    align-items:flex-end;
-    gap:8px;
-  }
-  .cover .scroll-cue-text{
-    font-size:11px;
-    color:var(--muted);
-    letter-spacing:0.04em;
-    text-transform:uppercase;
-    text-align:right;
-  }
-  .cover .scroll-cue-arrow{
     width:18px;
     height:18px;
     color:var(--ink);
@@ -190,7 +192,9 @@
     }
     .cover .meta{
       flex-direction:row;
-      gap:8vw;
+      align-items:flex-end;
+      gap:6vw;
+      flex-wrap:wrap;
     }
   }
 
@@ -317,7 +321,7 @@
     display:block;
   }
   .grid-view-inner{
-    max-width:1000px;
+    max-width:1900px;
     margin:0 auto;
     padding:calc(8vh + 34px) 5vw 8vh;
   }
@@ -329,6 +333,12 @@
   @media (min-width:640px){
     .grid-list{
       gap:5vw 4vw;
+    }
+  }
+  @media (min-width:900px){
+    .grid-list{
+      grid-template-columns:repeat(4, 1fr);
+      gap:3vw 2.5vw;
     }
   }
   .grid-item{
@@ -394,24 +404,24 @@
   <button type="button" data-mode="grid">Grid</button>
 </div>
 
+<a class="buy-link" href="https://www.instagram.com/kindermilo/" target="_blank" rel="noopener noreferrer">Buy</a>
+
 <div class="viewport" id="viewport">
 
   <section class="cover">
-    <a class="buy-link" href="https://www.instagram.com/kindermilo/" target="_blank" rel="noopener noreferrer">Buy</a>
+    <img class="deco" src="decor.svg" alt="">
     <div class="title-group">
-      <h1 class="title">catalog</h1>
-      <div class="exhibition-name">where the body fades, bitter herbs grow</div>
+      <div class="catalog-label">Catalog</div>
+      <h1 class="title">where the body<br>fades, bitter<br>herbs grow</h1>
     </div>
     <div class="bottom meta">
       <div><b>Personal exhibition</b>On show 12/09 — 26/09</div>
       <div><b>Art Studio Muse</b>Opening 12/09 19:00</div>
+      <div>15 Galaktion Tabidze St,<br>Tbilisi</div>
     </div>
-    <div class="scroll-cue">
-      <span class="scroll-cue-text">15 Galaktion Tabidze St, Tbilisi</span>
-      <svg class="scroll-cue-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="6 9 12 15 18 9"></polyline>
-      </svg>
-    </div>
+    <svg class="scroll-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
   </section>
 
   <!-- artwork + contact sections injected here -->
