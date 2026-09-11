@@ -24,6 +24,7 @@
     background:var(--bg);
     color:var(--ink);
     font-family:'Geist Mono', ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+    text-transform:uppercase;
   }
   html.grid-mode, html.grid-mode body{
     height:auto;
@@ -99,32 +100,49 @@
     justify-content:space-between;
     padding-bottom:16vh;
   }
-  .cover .top, .cover .bottom{
+  .cover .bottom{
     width:100%;
   }
   .cover .buy-link{
+    position:absolute;
+    top:1.5vh;
+    left:5vw;
     font-size:11px;
     letter-spacing:0.04em;
-    line-height:1.6;
-    text-transform:uppercase;
     color:var(--ink);
-    display:inline-block;
-    padding:6px 10px;
-    border:1px solid var(--ink);
+    font-weight:700;
     text-decoration:none;
     transition:opacity .2s ease;
   }
   .cover .buy-link:hover{
     opacity:0.55;
   }
+  @media (max-width:639px){
+    .cover .buy-link{
+      top:7vh;
+    }
+  }
+  .cover .title-group{
+    margin-top:9vh;
+  }
   .cover .title{
     font-size:clamp(38px, 14vw, 120px);
     font-weight:700;
     line-height:0.98;
     letter-spacing:-0.02em;
-    max-width:11ch;
     margin:0;
-    text-transform:uppercase;
+  }
+  @media (min-width:640px){
+    .cover .title-group{
+      margin-top:4vh;
+    }
+  }
+  .cover .exhibition-name{
+    font-size:clamp(11px, 2.4vw, 15px);
+    color:var(--muted);
+    letter-spacing:0.04em;
+    margin-top:14px;
+    max-width:28ch;
   }
   .cover .meta{
     display:flex;
@@ -379,10 +397,11 @@
 <div class="viewport" id="viewport">
 
   <section class="cover">
-    <div class="top">
-      <a class="buy-link" href="https://www.instagram.com/kindermilo/" target="_blank" rel="noopener noreferrer">Buy</a>
+    <a class="buy-link" href="https://www.instagram.com/kindermilo/" target="_blank" rel="noopener noreferrer">Buy</a>
+    <div class="title-group">
+      <h1 class="title">catalog</h1>
+      <div class="exhibition-name">where the body fades, bitter herbs grow</div>
     </div>
-    <h1 class="title">where the body<br>fades, bitter<br>herbs grow</h1>
     <div class="bottom meta">
       <div><b>Personal exhibition</b>On show 12/09 — 26/09</div>
       <div><b>Art Studio Muse</b>Opening 12/09 19:00</div>
