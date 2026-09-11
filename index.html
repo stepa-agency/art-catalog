@@ -61,7 +61,7 @@
     position:fixed;
     top:3vh;
     right:5vw;
-    z-index:30;
+    z-index:1;
     display:flex;
     gap:7px;
     align-items:center;
@@ -284,12 +284,11 @@
   }
   .grid-list{
     display:grid;
-    grid-template-columns:1fr;
-    gap:12vw 6vw;
+    grid-template-columns:1fr 1fr;
+    gap:6vw 3vw;
   }
   @media (min-width:640px){
     .grid-list{
-      grid-template-columns:1fr 1fr;
       gap:5vw 4vw;
     }
   }
@@ -542,45 +541,14 @@ document.addEventListener('keydown', (e) => {
   });
   if(e.key === 'ArrowDown' || e.key === 'PageDown'){
     e.preventDefault();
-    const atEnd = current >= allSections.length - 1;
-    const next = atEnd ? allSections[0] : allSections[current+1];
-    next && next.scrollIntoView({behavior: atEnd ? 'instant' : 'smooth'});
+    const next = allSections[Math.min(current+1, allSections.length-1)];
+    next && next.scrollIntoView({behavior:'smooth'});
   } else if(e.key === 'ArrowUp' || e.key === 'PageUp'){
     e.preventDefault();
-    const atStart = current <= 0;
-    const prev = atStart ? allSections[allSections.length-1] : allSections[current-1];
-    prev && prev.scrollIntoView({behavior: atStart ? 'instant' : 'smooth'});
+    const prev = allSections[Math.max(current-1, 0)];
+    prev && prev.scrollIntoView({behavior:'smooth'});
   }
 });
-
-/* loop scrolling: one more nudge past either end jumps to the other end */
-let wrapLock = false;
-function tryWrap(delta){
-  if(gridMode || wrapLock || !delta) return;
-  const atBottom = viewport.scrollTop + viewport.clientHeight >= viewport.scrollHeight - 2;
-  const atTop = viewport.scrollTop <= 2;
-  if(delta > 0 && atBottom){
-    wrapLock = true;
-    viewport.scrollTo({top:0, behavior:'instant'});
-    setTimeout(() => { wrapLock = false; }, 700);
-  } else if(delta < 0 && atTop){
-    wrapLock = true;
-    viewport.scrollTo({top: viewport.scrollHeight, behavior:'instant'});
-    setTimeout(() => { wrapLock = false; }, 700);
-  }
-}
-viewport.addEventListener('wheel', (e) => tryWrap(e.deltaY), {passive:true});
-
-let touchStartY = null;
-viewport.addEventListener('touchstart', (e) => {
-  touchStartY = e.touches[0].clientY;
-}, {passive:true});
-viewport.addEventListener('touchend', (e) => {
-  if(touchStartY == null) return;
-  const delta = touchStartY - e.changedTouches[0].clientY;
-  touchStartY = null;
-  if(Math.abs(delta) > 40) tryWrap(delta);
-}, {passive:true});
 
 /* grid view */
 const gridList = document.getElementById('gridList');
