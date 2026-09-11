@@ -25,14 +25,23 @@
     color:var(--ink);
     font-family:'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
+  html.grid-mode, html.grid-mode body{
+    height:auto;
+    overflow-y:auto;
+  }
 
   .viewport{
+    position:relative;
+    z-index:2;
     height:100dvh;
     overflow-y:scroll;
     overscroll-behavior-y:contain;
     scroll-snap-type:y mandatory;
     scroll-behavior:smooth;
     -webkit-overflow-scrolling:touch;
+  }
+  html.grid-mode .viewport{
+    display:none;
   }
 
   section{
@@ -45,6 +54,42 @@
     justify-content:center;
     position:relative;
     padding:3vh 5vw;
+  }
+
+  /* ---- mode toggle ---- */
+  .mode-toggle{
+    position:fixed;
+    top:3vh;
+    right:5vw;
+    z-index:30;
+    display:flex;
+    gap:7px;
+    align-items:center;
+    font-size:11px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+  }
+  .mode-toggle button{
+    background:none;
+    border:none;
+    padding:0;
+    font:inherit;
+    letter-spacing:inherit;
+    text-transform:inherit;
+    color:var(--muted);
+    cursor:pointer;
+  }
+  .mode-toggle button.active{
+    color:var(--ink);
+    font-weight:700;
+  }
+  .mode-toggle .sep{
+    color:var(--muted);
+  }
+  @media (max-width:639px){
+    .mode-toggle{
+      top:8vh;
+    }
   }
 
   /* ---- cover ---- */
@@ -153,7 +198,7 @@
     display:flex;
     justify-content:center;
     pointer-events:none;
-    z-index:10;
+    z-index:1;
     opacity:0;
     transition:opacity .2s ease;
   }
@@ -161,7 +206,8 @@
     opacity:1;
   }
   .caption{
-    width:min(720px, 90vw);
+    width:auto;
+    max-width:min(560px, 78vw);
     display:flex;
     flex-direction:column;
     gap:4px;
@@ -195,17 +241,115 @@
     color:var(--muted);
     letter-spacing:0.02em;
   }
-  .photo-count{
+
+  /* ---- contact slide ---- */
+  .contact-inner{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:20px;
+    text-align:center;
+  }
+  .contact-lead{
+    font-size:12px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .contact-handle{
+    font-size:clamp(30px, 8vw, 52px);
+    font-weight:700;
+    letter-spacing:-0.01em;
+    color:var(--ink);
+    text-decoration:none;
+    border-bottom:1px solid var(--ink);
+    padding-bottom:6px;
+    transition:opacity .25s ease;
+  }
+  .contact-handle:hover{
+    opacity:0.55;
+  }
+
+  /* ---- grid view ---- */
+  .grid-view{
+    display:none;
+  }
+  html.grid-mode .grid-view{
+    display:block;
+  }
+  .grid-view-inner{
+    max-width:1000px;
+    margin:0 auto;
+    padding:calc(8vh + 34px) 5vw 8vh;
+  }
+  .grid-list{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12vw 6vw;
+  }
+  @media (min-width:640px){
+    .grid-list{
+      grid-template-columns:1fr 1fr;
+      gap:5vw 4vw;
+    }
+  }
+  .grid-item .g-frame{
+    width:100%;
+    aspect-ratio:4/5;
+    background:#f4f2ec;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .grid-item img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .grid-item .g-placeholder{
+    color:var(--muted);
+    font-size:11px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+  }
+  .grid-item .g-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-top:10px;
+    gap:10px;
+  }
+  .grid-item .g-title{
+    font-size:15px;
+    font-weight:500;
+  }
+  .grid-item .g-price{
+    font-size:11px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--muted);
+    white-space:nowrap;
+  }
+  .grid-item .g-price.sold{
+    color:var(--ink);
+    font-weight:700;
+  }
+  .grid-item .g-meta{
     font-size:11px;
     color:var(--muted);
-    letter-spacing:0.04em;
-  }
-  .photo-count:empty{
-    display:none;
+    margin-top:2px;
   }
 </style>
 </head>
 <body>
+
+<div class="mode-toggle" id="modeToggle">
+  <button type="button" data-mode="scroll" class="active">Scroll</button>
+  <span class="sep">/</span>
+  <button type="button" data-mode="grid">Grid</button>
+</div>
 
 <div class="viewport" id="viewport">
 
@@ -221,7 +365,7 @@
     <div class="hint">scroll ↓</div>
   </section>
 
-  <!-- artwork sections injected here -->
+  <!-- artwork + contact sections injected here -->
 
 </div>
 
@@ -233,7 +377,12 @@
     </div>
     <div class="cap-title" id="capTitle"></div>
     <div class="cap-meta" id="capMeta"></div>
-    <div class="photo-count" id="capCount"></div>
+  </div>
+</div>
+
+<div class="grid-view" id="gridView">
+  <div class="grid-view-inner">
+    <div class="grid-list" id="gridList"></div>
   </div>
 </div>
 
@@ -281,7 +430,6 @@ const capIdx = document.getElementById('capIdx');
 const capStatus = document.getElementById('capStatus');
 const capTitle = document.getElementById('capTitle');
 const capMeta = document.getElementById('capMeta');
-const capCount = document.getElementById('capCount');
 
 let activeIndex = -1;
 
@@ -292,7 +440,10 @@ function renderCaption(i){
   capStatus.textContent = priceLabel(w);
   capTitle.textContent = w.title;
   capMeta.textContent = metaLine(w);
-  capCount.textContent = w.photos.length > 1 ? ((w._photoIdx||0)+1) + ' / ' + w.photos.length : '';
+
+  const media = document.querySelector('section[data-index="'+i+'"] .frame > *');
+  const mediaWidth = media ? media.getBoundingClientRect().width : 0;
+  captionEl.style.width = mediaWidth > 40 ? Math.round(mediaWidth) + 'px' : '';
 }
 
 function showCaption(i){
@@ -331,7 +482,6 @@ works.forEach((w, i) => {
       frame.addEventListener('click', () => {
         w._photoIdx = (w._photoIdx + 1) % w.photos.length;
         img.src = w.photos[w._photoIdx];
-        if(activeIndex === i) capCount.textContent = (w._photoIdx+1) + ' / ' + w.photos.length;
       });
     }
     frame.appendChild(img);
@@ -346,12 +496,23 @@ works.forEach((w, i) => {
   viewport.appendChild(section);
 });
 
-const allSections = Array.from(document.querySelectorAll('section'));
+const contactSection = document.createElement('section');
+contactSection.className = 'contact';
+contactSection.id = 'contact';
+contactSection.innerHTML = `
+  <div class="contact-inner">
+    <div class="contact-lead">Want to buy something?<br>Text me</div>
+    <a class="contact-handle" href="https://t.me/karayul" target="_blank" rel="noopener noreferrer">@karayul</a>
+  </div>
+`;
+viewport.appendChild(contactSection);
+
+const allSections = Array.from(document.querySelectorAll('.viewport > section'));
 
 function updateActiveFromScroll(){
   const slot = Math.round(viewport.scrollTop / viewport.clientHeight);
-  if(slot <= 0) hideCaption();
-  else showCaption(Math.min(slot - 1, works.length - 1));
+  if(slot <= 0 || slot > works.length) hideCaption();
+  else showCaption(slot - 1);
 }
 
 let scrollTicking = false;
@@ -371,20 +532,109 @@ if(location.hash){
   if(target) target.scrollIntoView({behavior:'instant'});
 }
 
+let gridMode = false;
+
 document.addEventListener('keydown', (e) => {
+  if(gridMode) return;
   const current = allSections.findIndex(s => {
     const r = s.getBoundingClientRect();
     return r.top >= -10 && r.top < window.innerHeight * 0.5;
   });
   if(e.key === 'ArrowDown' || e.key === 'PageDown'){
     e.preventDefault();
-    const next = allSections[Math.min(current+1, allSections.length-1)];
-    next && next.scrollIntoView({behavior:'smooth'});
+    const atEnd = current >= allSections.length - 1;
+    const next = atEnd ? allSections[0] : allSections[current+1];
+    next && next.scrollIntoView({behavior: atEnd ? 'instant' : 'smooth'});
   } else if(e.key === 'ArrowUp' || e.key === 'PageUp'){
     e.preventDefault();
-    const prev = allSections[Math.max(current-1, 0)];
-    prev && prev.scrollIntoView({behavior:'smooth'});
+    const atStart = current <= 0;
+    const prev = atStart ? allSections[allSections.length-1] : allSections[current-1];
+    prev && prev.scrollIntoView({behavior: atStart ? 'instant' : 'smooth'});
   }
+});
+
+/* loop scrolling: one more nudge past either end jumps to the other end */
+let wrapLock = false;
+function tryWrap(delta){
+  if(gridMode || wrapLock || !delta) return;
+  const atBottom = viewport.scrollTop + viewport.clientHeight >= viewport.scrollHeight - 2;
+  const atTop = viewport.scrollTop <= 2;
+  if(delta > 0 && atBottom){
+    wrapLock = true;
+    viewport.scrollTo({top:0, behavior:'instant'});
+    setTimeout(() => { wrapLock = false; }, 700);
+  } else if(delta < 0 && atTop){
+    wrapLock = true;
+    viewport.scrollTo({top: viewport.scrollHeight, behavior:'instant'});
+    setTimeout(() => { wrapLock = false; }, 700);
+  }
+}
+viewport.addEventListener('wheel', (e) => tryWrap(e.deltaY), {passive:true});
+
+let touchStartY = null;
+viewport.addEventListener('touchstart', (e) => {
+  touchStartY = e.touches[0].clientY;
+}, {passive:true});
+viewport.addEventListener('touchend', (e) => {
+  if(touchStartY == null) return;
+  const delta = touchStartY - e.changedTouches[0].clientY;
+  touchStartY = null;
+  if(Math.abs(delta) > 40) tryWrap(delta);
+}, {passive:true});
+
+/* grid view */
+const gridList = document.getElementById('gridList');
+works.forEach((w) => {
+  const item = document.createElement('div');
+  item.className = 'grid-item';
+
+  const frame = document.createElement('div');
+  frame.className = 'g-frame';
+  if(w.photos.length){
+    const img = document.createElement('img');
+    img.src = w.photos[0];
+    img.alt = w.title;
+    frame.appendChild(img);
+  } else {
+    const ph = document.createElement('div');
+    ph.className = 'g-placeholder';
+    ph.textContent = 'photo coming soon';
+    frame.appendChild(ph);
+  }
+
+  const row = document.createElement('div');
+  row.className = 'g-row';
+  const title = document.createElement('div');
+  title.className = 'g-title';
+  title.textContent = w.title;
+  const price = document.createElement('div');
+  price.className = 'g-price' + (w.status === 'sold' ? ' sold' : '');
+  price.textContent = priceLabel(w);
+  row.appendChild(title);
+  row.appendChild(price);
+
+  const meta = document.createElement('div');
+  meta.className = 'g-meta';
+  meta.textContent = metaLine(w);
+
+  item.appendChild(frame);
+  item.appendChild(row);
+  item.appendChild(meta);
+  gridList.appendChild(item);
+});
+
+const modeToggle = document.getElementById('modeToggle');
+function setMode(mode){
+  gridMode = mode === 'grid';
+  document.documentElement.classList.toggle('grid-mode', gridMode);
+  modeToggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+  if(gridMode) hideCaption();
+  else updateActiveFromScroll();
+}
+modeToggle.addEventListener('click', (e) => {
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  setMode(btn.dataset.mode);
 });
 </script>
 </body>
