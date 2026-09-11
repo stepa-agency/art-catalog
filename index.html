@@ -6,7 +6,7 @@
 <title>where the body fades, bitter herbs grow</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#ffffff;
@@ -23,7 +23,7 @@
     overscroll-behavior:none;
     background:var(--bg);
     color:var(--ink);
-    font-family:'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+    font-family:'Geist Mono', ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   }
   html.grid-mode, html.grid-mode body{
     height:auto;
@@ -97,11 +97,12 @@
     text-align:left;
     align-items:flex-start;
     justify-content:space-between;
+    padding-bottom:16vh;
   }
   .cover .top, .cover .bottom{
     width:100%;
   }
-  .cover .loc{
+  .cover .buy-link{
     font-size:11px;
     letter-spacing:0.04em;
     line-height:1.6;
@@ -110,13 +111,18 @@
     display:inline-block;
     padding:6px 10px;
     border:1px solid var(--ink);
+    text-decoration:none;
+    transition:opacity .2s ease;
+  }
+  .cover .buy-link:hover{
+    opacity:0.55;
   }
   .cover .title{
-    font-size:clamp(26px, 8vw, 56px);
+    font-size:clamp(38px, 14vw, 120px);
     font-weight:700;
-    line-height:1.15;
-    letter-spacing:-0.01em;
-    max-width:14ch;
+    line-height:0.98;
+    letter-spacing:-0.02em;
+    max-width:11ch;
     margin:0;
     text-transform:uppercase;
   }
@@ -133,22 +139,37 @@
     display:block;
     font-weight:700;
   }
-  .cover .hint{
+  .cover .scroll-cue{
     position:absolute;
     bottom:3vh;
     right:5vw;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:8px;
+  }
+  .cover .scroll-cue-text{
     font-size:11px;
     color:var(--muted);
     letter-spacing:0.04em;
     text-transform:uppercase;
-    animation:pulse 2.4s ease-in-out infinite;
+    text-align:right;
   }
-  @keyframes pulse{
-    0%,100%{opacity:0.35}
-    50%{opacity:1}
+  .cover .scroll-cue-arrow{
+    width:18px;
+    height:18px;
+    color:var(--ink);
+    animation:bounce 1.5s ease-in-out infinite;
+  }
+  @keyframes bounce{
+    0%,100%{ transform:translateY(0); opacity:0.4; }
+    50%{ transform:translateY(7px); opacity:1; }
   }
 
   @media (min-width:640px){
+    .cover{
+      padding-bottom:10vh;
+    }
     .cover .meta{
       flex-direction:row;
       gap:8vw;
@@ -292,6 +313,11 @@
       gap:5vw 4vw;
     }
   }
+  .grid-item{
+    display:block;
+    color:inherit;
+    text-decoration:none;
+  }
   .grid-item .g-frame{
     width:100%;
     aspect-ratio:4/5;
@@ -354,14 +380,19 @@
 
   <section class="cover">
     <div class="top">
-      <span class="loc">15 Galaktion Tabidze St, Tbilisi</span>
+      <a class="buy-link" href="https://www.instagram.com/kindermilo/" target="_blank" rel="noopener noreferrer">Buy</a>
     </div>
     <h1 class="title">where the body<br>fades, bitter<br>herbs grow</h1>
     <div class="bottom meta">
       <div><b>Personal exhibition</b>On show 12/09 — 26/09</div>
       <div><b>Art Studio Muse</b>Opening 12/09 19:00</div>
     </div>
-    <div class="hint">scroll ↓</div>
+    <div class="scroll-cue">
+      <span class="scroll-cue-text">15 Galaktion Tabidze St, Tbilisi</span>
+      <svg class="scroll-cue-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </div>
   </section>
 
   <!-- artwork + contact sections injected here -->
@@ -501,7 +532,7 @@ contactSection.id = 'contact';
 contactSection.innerHTML = `
   <div class="contact-inner">
     <div class="contact-lead">Want to buy something?<br>Text me</div>
-    <a class="contact-handle" href="https://t.me/karayul" target="_blank" rel="noopener noreferrer">@karayul</a>
+    <a class="contact-handle" href="https://www.instagram.com/kindermilo/" target="_blank" rel="noopener noreferrer">kindermilo</a>
   </div>
 `;
 viewport.appendChild(contactSection);
@@ -553,8 +584,19 @@ document.addEventListener('keydown', (e) => {
 /* grid view */
 const gridList = document.getElementById('gridList');
 works.forEach((w) => {
-  const item = document.createElement('div');
+  const slug = slugify(w.title);
+  const item = document.createElement('a');
   item.className = 'grid-item';
+  item.href = '#' + slug;
+  item.addEventListener('click', (e) => {
+    e.preventDefault();
+    setMode('scroll');
+    requestAnimationFrame(() => {
+      const target = document.getElementById(slug);
+      if(target) target.scrollIntoView({behavior:'instant'});
+      history.replaceState(null, '', '#' + slug);
+    });
+  });
 
   const frame = document.createElement('div');
   frame.className = 'g-frame';
