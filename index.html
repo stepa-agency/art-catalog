@@ -145,15 +145,34 @@
     padding:2em;
   }
 
-  .caption{
-    position:absolute;
-    left:50%;
+  .caption-wrap{
+    position:fixed;
+    left:0;
+    right:0;
     bottom:3vh;
-    transform:translateX(-50%);
+    display:flex;
+    justify-content:center;
+    pointer-events:none;
+    z-index:10;
+    opacity:0;
+    transition:opacity .2s ease;
+  }
+  .caption-wrap.visible{
+    opacity:1;
+  }
+  .caption{
     width:min(720px, 90vw);
     display:flex;
     flex-direction:column;
     gap:4px;
+    opacity:1;
+    transform:translateY(0);
+    transition:opacity .4s ease, transform .4s ease;
+  }
+  .caption.enter{
+    opacity:0;
+    transform:translateY(10px);
+    transition:none;
   }
   .cap-row{
     display:flex;
@@ -181,6 +200,9 @@
     color:var(--muted);
     letter-spacing:0.04em;
   }
+  .photo-count:empty{
+    display:none;
+  }
 </style>
 </head>
 <body>
@@ -201,6 +223,18 @@
 
   <!-- artwork sections injected here -->
 
+</div>
+
+<div class="caption-wrap" id="captionWrap">
+  <div class="caption" id="caption">
+    <div class="cap-row">
+      <span id="capIdx"></span>
+      <span id="capStatus"></span>
+    </div>
+    <div class="cap-title" id="capTitle"></div>
+    <div class="cap-meta" id="capMeta"></div>
+    <div class="photo-count" id="capCount"></div>
+  </div>
 </div>
 
 <script>
@@ -241,7 +275,44 @@ function slugify(title){
     .replace(/(^-+|-+$)/g, '');
 }
 
+const captionWrap = document.getElementById('captionWrap');
+const captionEl = document.getElementById('caption');
+const capIdx = document.getElementById('capIdx');
+const capStatus = document.getElementById('capStatus');
+const capTitle = document.getElementById('capTitle');
+const capMeta = document.getElementById('capMeta');
+const capCount = document.getElementById('capCount');
+
+let activeIndex = -1;
+
+function renderCaption(i){
+  const w = works[i];
+  capIdx.textContent = w.id + ' / ' + String(works.length).padStart(2,'0');
+  capStatus.className = 'status' + (w.status === 'sold' ? ' sold' : '');
+  capStatus.textContent = priceLabel(w);
+  capTitle.textContent = w.title;
+  capMeta.textContent = metaLine(w);
+  capCount.textContent = w.photos.length > 1 ? ((w._photoIdx||0)+1) + ' / ' + w.photos.length : '';
+}
+
+function showCaption(i){
+  if(activeIndex === i) return;
+  activeIndex = i;
+  captionWrap.classList.add('visible');
+  captionEl.classList.add('enter');
+  renderCaption(i);
+  void captionEl.offsetWidth;
+  captionEl.classList.remove('enter');
+}
+
+function hideCaption(){
+  activeIndex = -1;
+  captionWrap.classList.remove('visible');
+}
+
 works.forEach((w, i) => {
+  w._photoIdx = 0;
+
   const section = document.createElement('section');
   section.className = 'artwork';
   section.dataset.index = i;
@@ -255,24 +326,15 @@ works.forEach((w, i) => {
     img.className = 'artwork-img';
     img.src = w.photos[0];
     img.alt = w.title;
-    let photoIdx = 0;
-    let countEl = null;
     if(w.photos.length > 1){
       frame.title = 'tap to see more photos';
       frame.addEventListener('click', () => {
-        photoIdx = (photoIdx + 1) % w.photos.length;
-        img.src = w.photos[photoIdx];
-        if(countEl) countEl.textContent = (photoIdx+1) + ' / ' + w.photos.length;
+        w._photoIdx = (w._photoIdx + 1) % w.photos.length;
+        img.src = w.photos[w._photoIdx];
+        if(activeIndex === i) capCount.textContent = (w._photoIdx+1) + ' / ' + w.photos.length;
       });
     }
     frame.appendChild(img);
-
-    if(w.photos.length > 1){
-      countEl = document.createElement('div');
-      countEl.className = 'photo-count';
-      countEl.textContent = '1 / ' + w.photos.length;
-      section._countEl = countEl;
-    }
   } else {
     const ph = document.createElement('div');
     ph.className = 'placeholder';
@@ -280,38 +342,29 @@ works.forEach((w, i) => {
     frame.appendChild(ph);
   }
 
-  const caption = document.createElement('div');
-  caption.className = 'caption';
-
-  const row = document.createElement('div');
-  row.className = 'cap-row';
-  const idxSpan = document.createElement('span');
-  idxSpan.textContent = w.id + ' / ' + String(works.length).padStart(2,'0');
-  const statusSpan = document.createElement('span');
-  statusSpan.className = 'status' + (w.status === 'sold' ? ' sold' : '');
-  statusSpan.textContent = priceLabel(w);
-  row.appendChild(idxSpan);
-  row.appendChild(statusSpan);
-
-  const title = document.createElement('div');
-  title.className = 'cap-title';
-  title.textContent = w.title;
-
-  const meta = document.createElement('div');
-  meta.className = 'cap-meta';
-  meta.textContent = metaLine(w);
-
-  caption.appendChild(row);
-  caption.appendChild(title);
-  caption.appendChild(meta);
-  if(section._countEl) caption.appendChild(section._countEl);
-
   section.appendChild(frame);
-  section.appendChild(caption);
   viewport.appendChild(section);
 });
 
 const allSections = Array.from(document.querySelectorAll('section'));
+
+function updateActiveFromScroll(){
+  const slot = Math.round(viewport.scrollTop / viewport.clientHeight);
+  if(slot <= 0) hideCaption();
+  else showCaption(Math.min(slot - 1, works.length - 1));
+}
+
+let scrollTicking = false;
+viewport.addEventListener('scroll', () => {
+  if(scrollTicking) return;
+  scrollTicking = true;
+  requestAnimationFrame(() => {
+    updateActiveFromScroll();
+    scrollTicking = false;
+  });
+});
+
+updateActiveFromScroll();
 
 if(location.hash){
   const target = document.getElementById(location.hash.slice(1));
