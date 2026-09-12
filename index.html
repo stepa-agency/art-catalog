@@ -575,7 +575,9 @@ function renderCaption(i){
 }
 
 let hashSyncTimer = null;
+let hashSyncPaused = false;
 function syncHash(i){
+  if(hashSyncPaused) return;
   clearTimeout(hashSyncTimer);
   hashSyncTimer = setTimeout(() => {
     const w = works[i];
@@ -772,23 +774,30 @@ modeToggle.addEventListener('click', (e) => {
 /* переход по якорю: и при открытии страницы, и когда по уже открытой вкладке
    сканируют QR другой работы — тогда браузер не перезагружает документ,
    а только меняет хеш, поэтому нужен hashchange */
-function goToHash(instant){
+function goToHash(){
   const id = decodeURIComponent(location.hash.slice(1));
   if(!id) return false;
   const target = document.getElementById(id);
   if(!target) return false;
   if(gridMode) setMode('scroll');
-  const jump = () => {
-    target.scrollIntoView({behavior: instant ? 'instant' : 'smooth'});
-    updateActiveFromScroll();
-  };
-  instant ? jump() : requestAnimationFrame(jump);
+  /* прыжок мгновенный: зритель отсканировал работу и хочет её сразу, а не
+     проезд через пятнадцать экранов. Пока летим, синхронизацию адреса
+     глушим, иначе промежуточная работа перепишет хеш и следующий скан
+     этой же работы не сработает */
+  hashSyncPaused = true;
+  clearTimeout(hashSyncTimer);
+  target.scrollIntoView({behavior: 'instant'});
+  updateActiveFromScroll();
+  setTimeout(() => {
+    hashSyncPaused = false;
+    syncHash(activeIndex);   // если за это время успели пролистать — адрес догоняет
+  }, 600);
   return true;
 }
 
-window.addEventListener('hashchange', () => goToHash(false));
-window.addEventListener('pageshow', () => { if(location.hash) goToHash(true); });
-goToHash(true);
+window.addEventListener('hashchange', goToHash);
+window.addEventListener('pageshow', () => { if(location.hash) goToHash(); });
+goToHash();
 </script>
 </body>
 </html>
