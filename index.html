@@ -125,34 +125,20 @@
   .cover .bottom{
     width:100%;
   }
-  .cover .deco{
-    position:absolute;
-    top:38%;
-    left:56%;
-    width:min(115vw, 1300px);
-    height:auto;
-    max-height:70vh;
-    transform:translate(-56%, -46%) rotate(-6deg);
-    z-index:-1;
-    pointer-events:none;
-    user-select:none;
-  }
   .cover .title-group{
     margin-top:9vh;
   }
-  .cover .catalog-label{
-    font-size:clamp(11px, 2.4vw, 15px);
-    color:var(--muted);
-    letter-spacing:0.04em;
-    margin-bottom:6px;
-  }
+  .cover .catalog-label,
   .cover .title{
-    font-size:clamp(28px, 9vw, 68px);
+    font-size:clamp(24px, min(8.6vw, 9.2vh), 68px);
     font-weight:700;
     line-height:1.05;
     letter-spacing:-0.01em;
-    max-width:13ch;
+    max-width:14ch;
     margin:0;
+  }
+  .cover .catalog-label{
+    color:var(--muted);
   }
   @media (min-width:640px){
     .cover .title-group{
@@ -172,12 +158,20 @@
     display:block;
     font-weight:700;
   }
-  .cover .scroll-arrow{
+  .cover .scroll-cue{
     position:absolute;
-    bottom:3vh;
+    left:5vw;
     right:5vw;
+    bottom:3vh;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    pointer-events:none;
+  }
+  .cover .scroll-arrow{
     width:18px;
     height:18px;
+    flex:none;
     color:var(--ink);
     animation:bounce 1.5s ease-in-out infinite;
   }
@@ -409,19 +403,26 @@
 <div class="viewport" id="viewport">
 
   <section class="cover">
-    <img class="deco" src="decor.svg" alt="">
     <div class="title-group">
       <div class="catalog-label">Catalog</div>
-      <h1 class="title">where the body<br>fades, bitter<br>herbs grow</h1>
+      <h1 class="title">Kareva Yulia.<br>where the body<br>fades, bitter<br>herbs grow</h1>
     </div>
     <div class="bottom meta">
       <div><b>Personal exhibition</b>On show 12/09 — 26/09</div>
       <div><b>Art Studio Muse</b>Opening 12/09 19:00</div>
       <div>15 Galaktion Tabidze St,<br>Tbilisi</div>
     </div>
-    <svg class="scroll-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="6 9 12 15 18 9"></polyline>
-    </svg>
+    <div class="scroll-cue">
+      <svg class="scroll-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+      <svg class="scroll-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+      <svg class="scroll-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </div>
   </section>
 
   <!-- artwork + contact sections injected here -->
@@ -494,6 +495,7 @@ let activeIndex = -1;
 
 function renderCaption(i){
   const w = works[i];
+  if(!w) return;
   capIdx.textContent = w.id + ' / ' + String(works.length).padStart(2,'0');
   capStatus.className = 'status' + (w.status === 'sold' ? ' sold' : '');
   capStatus.textContent = priceLabel(w);
@@ -569,8 +571,9 @@ viewport.appendChild(contactSection);
 const allSections = Array.from(document.querySelectorAll('.viewport > section'));
 
 function updateActiveFromScroll(){
-  const slot = Math.round(viewport.scrollTop / viewport.clientHeight);
-  if(slot <= 0 || slot > works.length) hideCaption();
+  const pageHeight = viewport.clientHeight;
+  const slot = pageHeight ? Math.round(viewport.scrollTop / pageHeight) : 0;
+  if(!(slot > 0) || slot > works.length) hideCaption();
   else showCaption(slot - 1);
 }
 
