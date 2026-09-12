@@ -180,8 +180,8 @@
     ],
     "photoSizes": [
       [
-        1070,
-        2000
+        918,
+        1714
       ]
     ]
   },
@@ -251,7 +251,15 @@
     "price": 400,
     "currency": "USD",
     "status": "available",
-    "photos": []
+    "photos": [
+      "photos/heavenly-dog.jpg"
+    ],
+    "photoSizes": [
+      [
+        2000,
+        1991
+      ]
+    ]
   },
   {
     "id": "14",

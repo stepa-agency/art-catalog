@@ -24,7 +24,9 @@
 
 ## Прод
 
-Живёт на **https://art-catalog-murex.vercel.app/**. Источник — GitHub-репозиторий
+Живёт на **https://yuliia-kareva-catalogue.vercel.app/** (12.09.2026 переименовали проект
+и добавили этот адрес; старый **art-catalog-murex.vercel.app** оставлен и продолжает
+работать — оба висят на одном проекте как Production). Источник — GitHub-репозиторий
 **github.com/stepa-agency/art-catalog**, Vercel-проект `art-catalog` (команда
 `notstepanivanov-1419s-projects`) собирает ветку `main` автоматически, ~15 секунд.
 
@@ -39,7 +41,8 @@
 (`/upload/main/photos`), иначе GitHub положит их в корень дублем.
 
 Диплинк на работу — хеш-якорь из `slugify(title)`, например
-`https://art-catalog-murex.vercel.app/#a-face-i-almost-remember`.
+`https://yuliia-kareva-catalogue.vercel.app/#a-face-i-almost-remember`. На этот адрес
+ведут QR с этикеток.
 
 ## Правила по сайту
 
