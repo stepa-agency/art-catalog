@@ -10,6 +10,12 @@
     "status": "available",
     "photos": [
       "photos/secret.jpg"
+    ],
+    "photoSizes": [
+      [
+        1600,
+        2000
+      ]
     ]
   },
   {
@@ -23,6 +29,12 @@
     "status": "available",
     "photos": [
       "photos/wild.jpg"
+    ],
+    "photoSizes": [
+      [
+        1600,
+        2000
+      ]
     ]
   },
   {
@@ -36,6 +48,12 @@
     "status": "available",
     "photos": [
       "photos/body.jpg"
+    ],
+    "photoSizes": [
+      [
+        1600,
+        2000
+      ]
     ]
   },
   {
@@ -49,6 +67,12 @@
     "status": "available",
     "photos": [
       "photos/breath.jpg"
+    ],
+    "photoSizes": [
+      [
+        1600,
+        2000
+      ]
     ]
   },
   {
@@ -65,6 +89,24 @@
       "photos/something-is-taking-root-2.jpg",
       "photos/something-is-taking-root-3.jpg",
       "photos/something-is-taking-root-4.jpg"
+    ],
+    "photoSizes": [
+      [
+        2000,
+        1225
+      ],
+      [
+        1500,
+        2000
+      ],
+      [
+        1500,
+        2000
+      ],
+      [
+        1500,
+        2000
+      ]
     ]
   },
   {
@@ -78,6 +120,12 @@
     "status": "sold",
     "photos": [
       "photos/a-face-i-almost-remember.jpg"
+    ],
+    "photoSizes": [
+      [
+        1398,
+        2000
+      ]
     ]
   },
   {
@@ -91,6 +139,12 @@
     "status": "available",
     "photos": [
       "photos/blooming-disorder.jpg"
+    ],
+    "photoSizes": [
+      [
+        1032,
+        2000
+      ]
     ]
   },
   {
@@ -99,11 +153,17 @@
     "technique": "watercolour on paper",
     "dimensions": "46x35 cm",
     "year": 2026,
-    "price": 500,
+    "price": 600,
     "currency": "USD",
     "status": "available",
     "photos": [
       "photos/soft-touches.jpg"
+    ],
+    "photoSizes": [
+      [
+        1506,
+        2000
+      ]
     ]
   },
   {
@@ -117,6 +177,12 @@
     "status": "available",
     "photos": [
       "photos/mothsomnia-1.jpg"
+    ],
+    "photoSizes": [
+      [
+        1070,
+        2000
+      ]
     ]
   },
   {
@@ -125,11 +191,17 @@
     "technique": "watercolour on paper",
     "dimensions": "65x48 cm",
     "year": null,
-    "price": 700,
+    "price": 750,
     "currency": "USD",
     "status": "available",
     "photos": [
       "photos/run-through-the-bitter-herbs.jpg"
+    ],
+    "photoSizes": [
+      [
+        2000,
+        1533
+      ]
     ]
   },
   {
@@ -143,6 +215,12 @@
     "status": "available",
     "photos": [
       "photos/spring-blush.jpg"
+    ],
+    "photoSizes": [
+      [
+        1432,
+        2000
+      ]
     ]
   },
   {
@@ -156,6 +234,12 @@
     "status": "available",
     "photos": [
       "photos/water-lily.jpg"
+    ],
+    "photoSizes": [
+      [
+        969,
+        2000
+      ]
     ]
   },
   {
@@ -180,6 +264,12 @@
     "status": "available",
     "photos": [
       "photos/forest-women.jpg"
+    ],
+    "photoSizes": [
+      [
+        1501,
+        2000
+      ]
     ]
   },
   {
@@ -193,6 +283,12 @@
     "status": "available",
     "photos": [
       "photos/under-the-haze.jpg"
+    ],
+    "photoSizes": [
+      [
+        1408,
+        2000
+      ]
     ]
   },
   {
@@ -228,6 +324,12 @@
     "status": "available",
     "photos": [
       "photos/raw-face.jpg"
+    ],
+    "photoSizes": [
+      [
+        1442,
+        2000
+      ]
     ]
   },
   {
@@ -241,6 +343,12 @@
     "status": "available",
     "photos": [
       "photos/a-cow-i-saw-in-a-dream.jpg"
+    ],
+    "photoSizes": [
+      [
+        1661,
+        2000
+      ]
     ]
   },
   {
@@ -255,6 +363,12 @@
     "status": "available",
     "photos": [
       "photos/bitter-herbs.jpg"
+    ],
+    "photoSizes": [
+      [
+        2000,
+        1500
+      ]
     ]
   }
 ]

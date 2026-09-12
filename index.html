@@ -300,6 +300,20 @@
     color:var(--muted);
     letter-spacing:0.02em;
   }
+  @media (max-width:639px){
+    .caption-wrap{
+      left:5vw;
+      right:5vw;
+      bottom:auto;
+      top:calc(100dvh - 132px);
+      align-items:flex-start;
+      justify-content:flex-start;
+    }
+    .caption{
+      width:100%;
+      max-width:none;
+    }
+  }
 
   /* ---- contact slide ---- */
   .contact-inner{
@@ -349,39 +363,48 @@
     padding:calc(8vh + 34px) 5vw 8vh;
   }
   .grid-list{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:6vw 3vw;
+    column-count:2;
+    column-gap:3vw;
   }
   @media (min-width:640px){
     .grid-list{
-      gap:5vw 4vw;
+      column-gap:4vw;
     }
   }
   @media (min-width:900px){
     .grid-list{
-      grid-template-columns:repeat(4, 1fr);
-      gap:3vw 2.5vw;
+      column-count:4;
+      column-gap:2.5vw;
     }
   }
   .grid-item{
-    display:block;
+    display:inline-block;
+    width:100%;
+    break-inside:avoid;
+    -webkit-column-break-inside:avoid;
+    margin-bottom:6vw;
     color:inherit;
     text-decoration:none;
   }
+  @media (min-width:900px){
+    .grid-item{
+      margin-bottom:3vw;
+    }
+  }
   .grid-item .g-frame{
     width:100%;
+    display:block;
+  }
+  .grid-item .g-placeholder-frame{
     aspect-ratio:4/5;
     background:#f4f2ec;
     display:flex;
     align-items:center;
     justify-content:center;
-    overflow:hidden;
   }
   .grid-item img{
     width:100%;
-    height:100%;
-    object-fit:cover;
+    height:auto;
     display:block;
   }
   .grid-item .g-placeholder{
@@ -434,7 +457,7 @@
   <section class="cover">
     <div class="title-group">
       <h1 class="title">Kareva Yulia.<br>where the body<br>fades, bitter<br>herbs grow</h1>
-      <div class="catalog-label">Catalog</div>
+      <div class="catalog-label">Catalogue</div>
     </div>
     <div class="bottom meta">
       <div class="meta-left">
@@ -487,9 +510,9 @@ const works = [
   {id:"05", title:"something is taking root", technique:"watercolour on paper", dimensions:"40x70 cm", year:2025, price:700, currency:"USD", status:"available", photos:["photos/something-is-taking-root-1.jpg", "photos/something-is-taking-root-2.jpg", "photos/something-is-taking-root-3.jpg", "photos/something-is-taking-root-4.jpg"]},
   {id:"06", title:"a face i almost remember", technique:"watercolour on paper", dimensions:"14x21 cm", year:2025, price:null, currency:"USD", status:"sold", photos:["photos/a-face-i-almost-remember.jpg"]},
   {id:"07", title:"blooming disorder", technique:"watercolour on paper", dimensions:"25x48 cm", year:2025, price:500, currency:"USD", status:"available", photos:["photos/blooming-disorder.jpg"]},
-  {id:"08", title:"soft touches", technique:"watercolour on paper", dimensions:"46x35 cm", year:2026, price:500, currency:"USD", status:"available", photos:["photos/soft-touches.jpg"]},
+  {id:"08", title:"soft touches", technique:"watercolour on paper", dimensions:"46x35 cm", year:2026, price:600, currency:"USD", status:"available", photos:["photos/soft-touches.jpg"]},
   {id:"09", title:"mothsomnia", technique:"watercolour on paper", dimensions:"49x26 cm", year:2026, price:450, currency:"USD", status:"available", photos:["photos/mothsomnia-1.jpg"]},
-  {id:"10", title:"run through the bitter herbs", technique:"watercolour on paper", dimensions:"65x48 cm", year:null, price:700, currency:"USD", status:"available", photos:["photos/run-through-the-bitter-herbs.jpg"]},
+  {id:"10", title:"run through the bitter herbs", technique:"watercolour on paper", dimensions:"65x48 cm", year:null, price:750, currency:"USD", status:"available", photos:["photos/run-through-the-bitter-herbs.jpg"]},
   {id:"11", title:"spring blush", technique:"watercolour on paper", dimensions:null, year:2026, price:250, currency:"USD", status:"available", photos:["photos/spring-blush.jpg"]},
   {id:"12", title:"water lily", technique:"watercolour on paper", dimensions:"24.5x48 cm", year:2025, price:300, currency:"USD", status:"available", photos:["photos/water-lily.jpg"]},
   {id:"13", title:"heavenly dog", technique:"oil on hardboard", dimensions:"20x20 cm", year:2024, price:400, currency:"USD", status:"available", photos:[]},
@@ -542,9 +565,13 @@ function renderCaption(i){
   capTitle.textContent = w.title;
   capMeta.textContent = metaLine(w);
 
-  const media = document.querySelector('section[data-index="'+i+'"] .frame > *');
-  const mediaWidth = media ? media.getBoundingClientRect().width : 0;
-  captionEl.style.width = mediaWidth > 40 ? Math.round(mediaWidth) + 'px' : '';
+  if(window.matchMedia('(max-width:639px)').matches){
+    captionEl.style.width = '';
+  } else {
+    const media = document.querySelector('section[data-index="'+i+'"] .frame > *');
+    const mediaWidth = media ? media.getBoundingClientRect().width : 0;
+    captionEl.style.width = mediaWidth > 40 ? Math.round(mediaWidth) + 'px' : '';
+  }
 }
 
 function showCaption(i){
@@ -578,6 +605,10 @@ works.forEach((w, i) => {
     img.className = 'artwork-img';
     img.loading = i === 0 ? 'eager' : 'lazy';
     img.decoding = 'async';
+    if(w.photoSizes && w.photoSizes[0]){
+      img.width = w.photoSizes[0][0];
+      img.height = w.photoSizes[0][1];
+    }
     img.src = w.photos[0];
     img.alt = w.title;
     if(w.photos.length > 1){
@@ -678,10 +709,15 @@ works.forEach((w) => {
     const img = document.createElement('img');
     img.loading = 'lazy';
     img.decoding = 'async';
+    if(w.photoSizes && w.photoSizes[0]){
+      img.width = w.photoSizes[0][0];
+      img.height = w.photoSizes[0][1];
+    }
     img.src = w.photos[0];
     img.alt = w.title;
     frame.appendChild(img);
   } else {
+    frame.classList.add('g-placeholder-frame');
     const ph = document.createElement('div');
     ph.className = 'g-placeholder';
     ph.textContent = 'photo coming soon';
