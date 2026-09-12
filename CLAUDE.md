@@ -9,7 +9,11 @@
 - `index.html` — весь сайт одним файлом (стили и скрипт inline). Данные работ — массив
   `works` внутри `<script>`, он синхронизируется с `catalog.json` вручную.
 - `catalog.json` — источник правды по работам: id, title, technique, dimensions, year,
-  price, currency, status (`available` / `sold`), photos.
+  price, `priceNote` (например «each» у серии), currency, status (`available` / `sold`),
+  photos. Сейчас 20 работ. Массив `works` в `index.html` **генерируется** из него
+  скриптом `tools/sync-works.py` (правим каталог, потом гоним скрипт; `--check`
+  проверяет, что страница не отстала). Руками массив не трогать.
+  Техника пишется в той же форме, что на этикетках: «watercolour on paper».
 - `photos/` — фотографии. Работы из каталога лежат под slug-именами
   (`a-face-i-almost-remember.jpg`), свежие из телеграм-бота — под `NNNN_<file_id>.ext`.
 - `decor.svg` — подписной декор, с обложки убран 12.09.2026, файл оставлен в репозитории.
