@@ -574,9 +574,24 @@ function renderCaption(i){
   }
 }
 
+let hashSyncTimer = null;
+function syncHash(i){
+  clearTimeout(hashSyncTimer);
+  hashSyncTimer = setTimeout(() => {
+    const w = works[i];
+    if(!w) return;
+    const slug = '#' + slugify(w.title);
+    if(location.hash === slug) return;
+    /* адрес должен совпадать с тем, что на экране: иначе повторный скан
+       той же работы не даст hashchange и переход не сработает */
+    try { history.replaceState(null, '', slug); } catch(e) {}
+  }, 350);
+}
+
 function showCaption(i){
   if(activeIndex === i) return;
   activeIndex = i;
+  syncHash(i);
   captionWrap.classList.add('visible');
   captionEl.classList.add('enter');
   renderCaption(i);
@@ -661,11 +676,6 @@ viewport.addEventListener('scroll', () => {
 });
 
 updateActiveFromScroll();
-
-if(location.hash){
-  const target = document.getElementById(location.hash.slice(1));
-  if(target) target.scrollIntoView({behavior:'instant'});
-}
 
 let gridMode = false;
 
@@ -758,6 +768,27 @@ modeToggle.addEventListener('click', (e) => {
   if(!btn) return;
   setMode(btn.dataset.mode);
 });
+
+/* переход по якорю: и при открытии страницы, и когда по уже открытой вкладке
+   сканируют QR другой работы — тогда браузер не перезагружает документ,
+   а только меняет хеш, поэтому нужен hashchange */
+function goToHash(instant){
+  const id = decodeURIComponent(location.hash.slice(1));
+  if(!id) return false;
+  const target = document.getElementById(id);
+  if(!target) return false;
+  if(gridMode) setMode('scroll');
+  const jump = () => {
+    target.scrollIntoView({behavior: instant ? 'instant' : 'smooth'});
+    updateActiveFromScroll();
+  };
+  instant ? jump() : requestAnimationFrame(jump);
+  return true;
+}
+
+window.addEventListener('hashchange', () => goToHash(false));
+window.addEventListener('pageshow', () => { if(location.hash) goToHash(true); });
+goToHash(true);
 </script>
 </body>
 </html>
