@@ -12,6 +12,7 @@
     --bg:#ffffff;
     --ink:#141414;
     --muted:#6b6a63;
+    --faint:#c4c2ba;
   }
 
   *{box-sizing:border-box;}
@@ -25,10 +26,6 @@
     color:var(--ink);
     font-family:'Geist Mono', ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
     text-transform:uppercase;
-  }
-  html.grid-mode, html.grid-mode body{
-    height:auto;
-    overflow-y:auto;
   }
 
   .viewport{
@@ -101,8 +98,8 @@
     font-size:11px;
     letter-spacing:0.04em;
     text-transform:uppercase;
-    color:var(--ink);
-    font-weight:700;
+    color:var(--muted);
+    font-weight:400;
     text-decoration:none;
     transition:opacity .2s ease;
   }
@@ -138,7 +135,7 @@
     margin:0;
   }
   .cover .catalog-label{
-    color:var(--muted);
+    color:var(--faint);
   }
   @media (min-width:640px){
     .cover .title-group{
@@ -157,6 +154,23 @@
   .cover .meta b{
     display:block;
     font-weight:700;
+  }
+  @media (max-width:639px){
+    .cover .meta{
+      flex-direction:row;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:6vw;
+    }
+    .cover .meta .meta-left{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .cover .meta .address{
+      text-align:right;
+      max-width:14ch;
+    }
   }
   .cover .scroll-cue{
     position:absolute;
@@ -190,11 +204,19 @@
       gap:6vw;
       flex-wrap:wrap;
     }
+    .cover .meta .meta-left{
+      display:contents;
+    }
+    .cover .meta .address{
+      max-width:24ch;
+    }
   }
 
   /* ---- artwork pages ---- */
   .artwork{
     padding-bottom:18vh;
+    padding-left:2vw;
+    padding-right:2vw;
   }
   .artwork .frame{
     width:100%;
@@ -313,6 +335,13 @@
   }
   html.grid-mode .grid-view{
     display:block;
+    position:fixed;
+    inset:0;
+    z-index:3;
+    background:var(--bg);
+    overflow-y:auto;
+    overscroll-behavior-y:contain;
+    -webkit-overflow-scrolling:touch;
   }
   .grid-view-inner{
     max-width:1900px;
@@ -404,13 +433,15 @@
 
   <section class="cover">
     <div class="title-group">
-      <div class="catalog-label">Catalog</div>
       <h1 class="title">Kareva Yulia.<br>where the body<br>fades, bitter<br>herbs grow</h1>
+      <div class="catalog-label">Catalog</div>
     </div>
     <div class="bottom meta">
-      <div><b>Personal exhibition</b>On show 12/09 — 26/09</div>
-      <div><b>Art Studio Muse</b>Opening 12/09 19:00</div>
-      <div>15 Galaktion Tabidze St,<br>Tbilisi</div>
+      <div class="meta-left">
+        <div><b>Personal exhibition</b>On show 12/09 — 26/09</div>
+        <div><b>Art Studio Muse</b>Opening 12/09 19:00</div>
+      </div>
+      <div class="address">15 Galaktion Tabidze St, Tbilisi</div>
     </div>
     <div class="scroll-cue">
       <svg class="scroll-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
