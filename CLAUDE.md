@@ -20,8 +20,16 @@
 
 ## Прод
 
-Задеплоен на **https://art-catalog-murex.vercel.app/**. Git remote у репозитория нет,
-деплой не из CLI (vercel/node на машине не установлены) — из кода URL никак не виден.
+Живёт на **https://art-catalog-murex.vercel.app/**. Источник — GitHub-репозиторий
+**github.com/stepa-agency/art-catalog**, Vercel-проект `art-catalog` (команда
+`notstepanivanov-1419s-projects`) собирает ветку `main` автоматически, ~15 секунд.
+
+Локальный репозиторий с ним **не связан**: `git remote` пуст, `gh`, `vercel`, `node`
+на машине не установлены. Обновление прода делается через веб-интерфейс GitHub —
+`github.com/stepa-agency/art-catalog/upload/main`, залить изменённые файлы и
+закоммитить прямо в `main` (браузер пользователя залогинен под stepa-agency).
+Из-за этого истории коммитов локально и на GitHub расходятся — хеши не совпадают.
+
 Диплинк на работу — хеш-якорь из `slugify(title)`, например
 `https://art-catalog-murex.vercel.app/#a-face-i-almost-remember`.
 
