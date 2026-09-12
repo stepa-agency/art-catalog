@@ -308,7 +308,15 @@
     "price": 300,
     "currency": "USD",
     "status": "available",
-    "photos": []
+    "photos": [
+      "photos/beast.jpg"
+    ],
+    "photoSizes": [
+      [
+        960,
+        1280
+      ]
+    ]
   },
   {
     "id": "17",
@@ -319,7 +327,15 @@
     "price": 300,
     "currency": "USD",
     "status": "available",
-    "photos": []
+    "photos": [
+      "photos/herbarium.jpg"
+    ],
+    "photoSizes": [
+      [
+        1086,
+        1448
+      ]
+    ]
   },
   {
     "id": "18",
