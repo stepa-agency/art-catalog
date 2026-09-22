@@ -225,6 +225,15 @@
     justify-content:center;
     cursor:pointer;
   }
+  @media (max-width:639px){
+    /* картина начинается под строкой BUY / SCROLL / GRID, а не под ней */
+    .artwork{
+      padding-top:calc(7vh + 16px);
+    }
+    .artwork img{
+      max-height:calc(100dvh - 7vh - 16px - 18vh) !important;
+    }
+  }
   .artwork img{
     max-width:100%;
     max-height:78dvh;
