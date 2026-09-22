@@ -394,5 +394,24 @@
         1500
       ]
     ]
+  },
+  {
+    "id": "21",
+    "title": "something grows in sleep",
+    "technique": "oil on canvas",
+    "dimensions": "50x100 cm",
+    "year": 2026,
+    "price": 1300,
+    "currency": "USD",
+    "status": "available",
+    "photos": [
+      "photos/something-grows-in-sleep.jpg"
+    ],
+    "photoSizes": [
+      [
+        957,
+        2000
+      ]
+    ]
   }
 ]
